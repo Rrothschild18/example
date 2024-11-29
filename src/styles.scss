@@ -1,1 +1,36 @@
 /* You can add global styles to this file, and also import other style files */
+
+@use "@angular/material" as mat;
+
+$theme: mat.define-theme();
+
+html,
+body {
+  height: 100%;
+  @include mat.all-component-themes($theme);
+  @include mat.color-variants-backwards-compatibility($theme);
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.mat-drawer {
+  background-color: #a9adc7 !important;
+}
+
+.mb-1 {
+  margin-bottom: 1rem;
+}
+.mb-125 {
+  margin-bottom: 1.25rem;
+}
+.mb-150 {
+  margin-bottom: 1.5rem;
+}
+.mb-175 {
+  margin-bottom: 1.75rem;
+}
+.mb-2 {
+  margin-bottom: 2rem;
+}
