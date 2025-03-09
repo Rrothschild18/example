@@ -17,10 +17,13 @@ src: ./pages/slide04.md
 ---
 
 ---
+src: ./pages/slide04_2.md
+---
+
+---
 src: ./pages/slide05.md
 ---
 
 ---
 src: ./pages/slide06.md
-layoutClass: gap-16
 ---

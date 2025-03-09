@@ -1,7 +1,6 @@
 # Sumário
 
-
-- Diagrama geral de uma list de afazeres (Todo List)
+- Diagrama geral de uma lista de afazeres (Todo List)
 - TodoService, TodoContainer
 - Outros estratégias de arquitetura
 - Estrutura de um arquivo .spec do front
