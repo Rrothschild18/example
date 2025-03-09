@@ -1,118 +1,78 @@
-import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { AsyncPipe } from "@angular/common";
 import {
-  FormControl,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-} from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatListModule } from '@angular/material/list';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { Observable } from 'rxjs';
-import { Todo, TodosService } from '../services/todos.service';
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  signal,
+} from "@angular/core";
+import { MatDividerModule } from "@angular/material/divider";
+import { Observable } from "rxjs";
+import { Todo, TodosService } from "../services/todos.service";
+import {
+  TodoAction,
+  TodoListFormComponent,
+  TodoToBe,
+} from "../todo-list-form/todo-list-form.component";
+import { TodoListComponent } from "../todo-list/todo-list.component";
 
 @Component({
-  selector: 'app-todo-container',
+  selector: "app-todo-container",
   standalone: true,
   imports: [
-    MatToolbarModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    FormsModule,
     MatDividerModule,
-    MatListModule,
-    MatIconModule,
-    FormsModule,
-    MatToolbarModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatListModule,
-    MatCheckboxModule,
-    MatIconModule,
-    MatDividerModule,
-    MatSlideToggleModule,
-    ReactiveFormsModule,
+    TodoListFormComponent,
+    TodoListComponent,
     AsyncPipe,
   ],
-  templateUrl: './todo-container.component.html',
-  styleUrl: './todo-container.component.scss',
+  templateUrl: "./todo-container.component.html",
+  styleUrl: "./todo-container.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TodoContainerComponent {
-  protected form = new FormGroup({
-    title: new FormControl(''),
-    description: new FormControl(''),
-  });
+  readonly #todoService = inject(TodosService);
+  protected editMode = signal<boolean>(false);
+  protected todos$: Observable<Todo[]> = this.#todoService.todos;
+  protected todoForEdition = signal<Todo | undefined>(undefined);
 
-  protected filterControl = new FormControl('');
-  protected filterDone: boolean | undefined;
-
-  protected todos$: Observable<Todo[]> = this.todoService.todos;
-  protected isEditingTodo = signal(false);
-
-  private currentEditingTodoId = signal<string | null>(null);
-
-  constructor(private todoService: TodosService) {}
-
-  addTodo(): void {
-    const todoToBeAdded = {
-      title: this.form.value.title!,
-      description: this.form.value.description!,
+  handleTodoEvent(event: { action: TodoAction; todo?: TodoToBe | Todo }) {
+    debugger;
+    const actions: Record<TodoAction, () => void> = {
+      edit: () => this.editTodo(event.todo!),
+      delete: () => this.deleteTodo(event.todo!),
+      save: () => this.saveTodo(event.todo!),
+      complete: () => this.toggleTodoStatus(event.todo!),
+      toggle: () => this.toggleTodoStatus(event.todo!),
+      markAllDone: () => this.markAllAsDone(),
     };
 
-    if (!todoToBeAdded.title.length || !todoToBeAdded.description.length) {
-      return;
-    }
-
-    this.todoService.add(todoToBeAdded);
-
-    this.form.setValue({
-      title: '',
-      description: '',
-    });
+    event.action && actions[event.action] && actions[event.action]();
   }
 
-  removeTodo(id: string): void {
-    this.todoService.remove(id);
+  saveTodo(todo: TodoToBe | Todo): void {
+    this.#todoService.add(todo);
   }
 
-  editTodo(): void {
-    const todoToBeEdited = {
-      title: this.form.value.title!,
-      description: this.form.value.description!,
-    };
-
-    this.todoService.edit(this.currentEditingTodoId()!, todoToBeEdited);
-    this.isEditingTodo.set(false);
-    this.currentEditingTodoId.set(null);
-
-    this.form.setValue({
-      title: '',
-      description: '',
-    });
+  deleteTodo(todo: TodoToBe | Todo): void {
+    "id" in todo && this.#todoService.remove(todo.id);
   }
 
-  setTodoForEdition(todo: Todo) {
-    this.currentEditingTodoId.set(todo.id);
-    this.isEditingTodo.set(true);
-    this.form.patchValue(todo);
+  editTodo(todo: TodoToBe | Todo): void {
+    debugger;
+    "id" in todo && this.#todoService.edit(todo.id, todo);
+    this.editMode.set(false);
+    this.todoForEdition.set(undefined);
+  }
+
+  toggleTodoStatus(todo: TodoToBe | Todo): void {
+    "id" in todo && this.#todoService.toggleStatus(todo.id);
   }
 
   markAllAsDone(): void {
-    this.todoService.markAllAsDone();
+    this.#todoService.markAllAsDone();
   }
 
-  toggleTodoStatus(id: string): void {
-    this.todoService.toggleStatus(id);
+  setTodoForEdition(todo: Todo | undefined) {
+    this.editMode.set(true);
+    this.todoForEdition.set(todo);
   }
-
-  filterTodos(): void {}
 }

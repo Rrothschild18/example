@@ -1,90 +1,19 @@
 <div class="container">
-  <div>
-    <form [formGroup]="form" class="d-flex flex-column">
-      <mat-form-field appearance="fill">
-        <mat-label>Title</mat-label>
-        <input
-          matInput
-          placeholder="Enter todo title"
-          formControlName="title"
-        />
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>Description</mat-label>
-        <textarea
-          matInput
-          placeholder="Enter todo description"
-          formControlName="description"
-        ></textarea>
-      </mat-form-field>
-    </form>
-
-    <div class="d-flex justify-content-end">
-      @if (!isEditingTodo()) {
-        <button
-          mat-flat-button
-          color="primary"
-          class="w-25 mb-175"
-          (click)="addTodo()"
-        >
-          Add Todo
-        </button>
-      } @else {
-        <button
-          mat-flat-button
-          color="primary"
-          class="w-25 mb-175"
-          (click)="editTodo()"
-        >
-          Edit Todo
-        </button>
-      }
-    </div>
-  </div>
+  <app-todo-list-form
+    (todoEvent)="handleTodoEvent($event)"
+    [isEditingTodo]="editMode()"
+    [todo]="todoForEdition()"
+  />
 
   <div class="mb-175 d-block">
     <mat-divider></mat-divider>
   </div>
 
-  <!-- <div class="mb-175">
-    <mat-form-field appearance="fill">
-      <mat-label>Filter by Title</mat-label>
-      <input
-        matInput
-        [formControl]="filterControl"
-        placeholder="Enter title to filter"
-      />
-    </mat-form-field>
-
-    <mat-slide-toggle [(ngModel)]="filterDone">Show only done</mat-slide-toggle>
-  </div> -->
-
-  <mat-divider></mat-divider>
-
-  <mat-list>
-    <mat-list-item role="listitem">
-      <button mat-button color="accent" (click)="markAllAsDone()">
-        Mark All as Done
-      </button>
-    </mat-list-item>
-    @for (todo of todos$ | async; track todo.id) {
-      <mat-list-item role="listitem">
-        <div class="d-flex justify-content-between align-items-center">
-          <mat-checkbox
-            (click)="toggleTodoStatus(todo.id)"
-            [checked]="todo.done"
-            >{{ todo.title }}</mat-checkbox
-          >
-          <div>
-            <button mat-icon-button (click)="setTodoForEdition(todo)">
-              <mat-icon>edit</mat-icon>
-            </button>
-            <button mat-icon-button color="warn" (click)="removeTodo(todo.id)">
-              <mat-icon>delete</mat-icon>
-            </button>
-          </div>
-        </div>
-      </mat-list-item>
-    }
-  </mat-list>
+  @if (todos$ | async; as todos) {
+    <app-todo-list
+      [todos]="todos"
+      (todoEvent)="handleTodoEvent($event)"
+      (todoToEdit)="setTodoForEdition($event)"
+    />
+  }
 </div>

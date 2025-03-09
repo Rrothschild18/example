@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
-import { mockTodos } from './todo-mock';
+import { Injectable } from "@angular/core";
+import { BehaviorSubject, Observable, of } from "rxjs";
+import { mockTodos } from "./todo-mock";
 
 export type Todo = {
   id: string;
@@ -9,11 +9,11 @@ export type Todo = {
   done: boolean;
 };
 
-export type AddTodo = Omit<Todo, 'id' | 'done'>;
-export type EditTodo = Omit<Todo, 'id' | 'done'>;
+export type AddTodo = Omit<Todo, "id" | "done">;
+export type EditTodo = Omit<Todo, "id" | "done">;
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class TodosService {
   #todos = new BehaviorSubject<Todo[]>(mockTodos);

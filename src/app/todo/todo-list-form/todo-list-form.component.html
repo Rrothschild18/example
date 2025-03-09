@@ -1,0 +1,38 @@
+<form [formGroup]="state().form" class="d-flex flex-column">
+  <mat-form-field appearance="fill">
+    <mat-label>Title</mat-label>
+    <input matInput placeholder="Enter todo title" formControlName="title" />
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Description</mat-label>
+    <textarea
+      matInput
+      placeholder="Enter todo description"
+      formControlName="description"
+    ></textarea>
+  </mat-form-field>
+</form>
+
+<div class="d-flex justify-content-end">
+  @if (isEditingTodoMode()) {
+    <button
+      mat-flat-button
+      color="primary"
+      class="w-25 mb-175"
+      (click)="editTodo()"
+    >
+      Edit Todo
+    </button>
+  }
+
+  @if (isCreateTodoMode()) {
+    <button
+      mat-flat-button
+      color="primary"
+      class="w-25 mb-175"
+      (click)="addTodo()"
+    >
+      Add Todo
+    </button>
+  }
+</div>
