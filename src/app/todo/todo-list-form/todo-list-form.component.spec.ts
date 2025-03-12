@@ -1,23 +1,24 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { TodoListFormComponent } from './todo-list-form.component';
+import { TodoListFormComponent } from "./todo-list-form.component";
+import { provideAnimations } from "@angular/platform-browser/animations";
 
-describe('TodoListFormComponent', () => {
+describe("TodoListFormComponent", () => {
   let component: TodoListFormComponent;
   let fixture: ComponentFixture<TodoListFormComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TodoListFormComponent]
-    })
-    .compileComponents();
-    
+      imports: [TodoListFormComponent],
+      providers: [provideAnimations()],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(TodoListFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

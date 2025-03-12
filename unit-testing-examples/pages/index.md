@@ -1,6 +1,6 @@
 ---
 theme: default
-title: Testes unitários no Angular
+title: Testes no Angular
 info: |
   ## Slidev Starter Template
   Presentation slides for developers.

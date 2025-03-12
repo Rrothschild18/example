@@ -1,6 +1,11 @@
 <mat-list>
   <mat-list-item role="listitem">
-    <button mat-button color="accent" (click)="markAllAsDone()">
+    <button
+      mat-button
+      id="markAllDoneBtn"
+      color="accent"
+      (click)="markAllAsDone()"
+    >
       Mark All as Done
     </button>
   </mat-list-item>
@@ -8,11 +13,20 @@
   @for (todo of state().todos(); track todo.id) {
     <mat-list-item role="listitem">
       <div class="d-flex justify-content-between align-items-center">
-        <mat-checkbox (click)="toggleTodoStatus(todo)" [checked]="todo.done">
-          <p class="mb-0">
+        <mat-checkbox
+          [id]="'todo-' + todo.id"
+          (click)="toggleTodoStatus(todo)"
+          [checked]="todo.done"
+        >
+          <p [id]="'todo-' + todo.id + '-title'" class="mb-0">
             {{ todo.title }}
           </p>
-          <small class="text-secondary"> {{ todo.description }} </small>
+          <small
+            [id]="'todo-' + todo.id + '-description'"
+            class="text-secondary"
+          >
+            {{ todo.description }}
+          </small>
         </mat-checkbox>
         <div>
           <button mat-icon-button (click)="setTodoForEdition(todo)">

@@ -1,6 +1,11 @@
 import { TestBed } from "@angular/core/testing";
-import { provideAnimations } from "@angular/platform-browser/animations";
+import {
+  BrowserAnimationsModule,
+  NoopAnimationsModule,
+  provideAnimations,
+} from "@angular/platform-browser/animations";
 import { AppComponent } from "./app.component";
+import { importProvidersFrom } from "@angular/core";
 
 describe("AppComponent", () => {
   beforeEach(async () => {
@@ -8,7 +13,7 @@ describe("AppComponent", () => {
       imports: [AppComponent],
       providers: [
         provideAnimations(),
-        // importProvidersFrom(NoopAnimationsModule, BrowserAnimationsModule),
+        importProvidersFrom(NoopAnimationsModule, BrowserAnimationsModule),
         // provideAnimationsAsync(),
       ],
     }).compileComponents();

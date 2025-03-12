@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   Input,
   computed,
@@ -36,6 +37,7 @@ export type ToggleEvent = { event: "toggle" | "markAllDone"; todo?: Todo };
   ],
   templateUrl: "./todo-list.component.html",
   styleUrl: "./todo-list.component.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TodoListComponent {
   todos = input<Todo[]>([]);

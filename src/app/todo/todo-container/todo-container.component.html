@@ -9,11 +9,9 @@
     <mat-divider></mat-divider>
   </div>
 
-  @if (todos$ | async; as todos) {
-    <app-todo-list
-      [todos]="todos"
-      (todoEvent)="handleTodoEvent($event)"
-      (todoToEdit)="setTodoForEdition($event)"
-    />
-  }
+  <app-todo-list
+    [todos]="todos()"
+    (todoEvent)="handleTodoEvent($event)"
+    (todoToEdit)="setTodoForEdition($event)"
+  />
 </div>

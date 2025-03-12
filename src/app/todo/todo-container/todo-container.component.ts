@@ -1,4 +1,6 @@
-import { AsyncPipe } from "@angular/common";
+import { AsyncPipe, JsonPipe } from "@angular/common";
+import { toSignal } from "@angular/core/rxjs-interop";
+
 import {
   ChangeDetectionStrategy,
   Component,
@@ -23,6 +25,7 @@ import { TodoListComponent } from "../todo-list/todo-list.component";
     TodoListFormComponent,
     TodoListComponent,
     AsyncPipe,
+    JsonPipe,
   ],
   templateUrl: "./todo-container.component.html",
   styleUrl: "./todo-container.component.scss",
@@ -32,10 +35,11 @@ export class TodoContainerComponent {
   readonly #todoService = inject(TodosService);
   protected editMode = signal<boolean>(false);
   protected todos$: Observable<Todo[]> = this.#todoService.todos;
+  protected todos = toSignal(this.#todoService.todos, { initialValue: [] });
   protected todoForEdition = signal<Todo | undefined>(undefined);
 
   handleTodoEvent(event: { action: TodoAction; todo?: TodoToBe | Todo }) {
-    debugger;
+    console.log({ t: this.todos() });
     const actions: Record<TodoAction, () => void> = {
       edit: () => this.editTodo(event.todo!),
       delete: () => this.deleteTodo(event.todo!),
@@ -57,7 +61,6 @@ export class TodoContainerComponent {
   }
 
   editTodo(todo: TodoToBe | Todo): void {
-    debugger;
     "id" in todo && this.#todoService.edit(todo.id, todo);
     this.editMode.set(false);
     this.todoForEdition.set(undefined);
